@@ -3,9 +3,9 @@ This module sets up the database connection and session management
 using SQLAlchemy."""
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-from config import DATABASE_URL
+from sqlalchemy.orm import declarative_base, sessionmaker
 
+from config import DATABASE_URL
 
 # Create the database engine
 # They are singletons and can be imported throughout the application

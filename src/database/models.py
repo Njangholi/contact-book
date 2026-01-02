@@ -3,7 +3,9 @@ This module defines the database models using SQLAlchemy ORM.
 """
 
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime
+
+from sqlalchemy import Column, DateTime, Integer, String
+
 from database.db import Base
 
 
