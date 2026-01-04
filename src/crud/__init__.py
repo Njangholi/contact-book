@@ -1,4 +1,6 @@
-"""Contact Book Database Package
-Contains database initialization code."""
+"""
+Contact Book CRUD Package
+Contains CRUD initialization code.
+"""
 
 __version__ = "1.0.0"
