@@ -1,18 +1,47 @@
+"""
+Contact Service Module
+
+This module provides higher-level service functions for managing contacts.
+It applies validation rules before delegating persistence operations to
+the CRUD layer. Errors are wrapped in a custom ``ContactServiceError``.
+"""
+
 from sqlalchemy.orm import Session
 
 from crud import contacts as contact_crud
 from database.models import Contact
-from utils.validation import (normalize_email, normalize_phone, validate_email,
-                              validate_name_pair, validate_phone)
+from utils.validation import (
+    normalize_email,
+    normalize_phone,
+    validate_email,
+    validate_name_pair,
+    validate_phone,
+)
 
 
 class ContactServiceError(Exception):
+    """
+    Exception raised for errors in the contact service layer.
+
+    :param errors: List of error messages describing validation or service issues.
+    :type errors: list[str]
+    """
+
     def __init__(self, errors: list[str]):
         self.errors = errors
         super().__init__("Contact service error")
 
 
 def add_contact(db: Session, data: dict) -> Contact:
+    """
+    Validate and add a new contact to the database.
+
+    :param db: SQLAlchemy session object.
+    :param data: Dictionary containing contact fields
+    (first_name, last_name, phone, email, category).
+    :raises ContactServiceError: If validation fails or duplicate phone/email exists.
+    :return: The persisted Contact object.
+    """
     errors = []
 
     # ---- Name rules ----
@@ -53,10 +82,25 @@ def add_contact(db: Session, data: dict) -> Contact:
 
 
 def list_contacts(db: Session) -> list[Contact]:
+    """
+    Retrieve all contacts from the database.
+
+    :param db: SQLAlchemy session object.
+    :return: List of Contact objects.
+    """
     return contact_crud.get_all(db)
 
 
 def update_contact(db: Session, contact_id: int, data: dict) -> Contact:
+    """
+    Update an existing contact in the database.
+
+    :param db: SQLAlchemy session object.
+    :param contact_id: Unique identifier of the contact to update.
+    :param data: Dictionary of fields to update (first_name, last_name, phone, email, category).
+    :raises ContactServiceError: If contact not found or validation fails.
+    :return: The updated Contact object.
+    """
     contact = contact_crud.get_by_id(db, contact_id)
     if not contact:
         raise ContactServiceError(["Contact not found"])
@@ -85,6 +129,14 @@ def update_contact(db: Session, contact_id: int, data: dict) -> Contact:
 
 
 def delete_contact(db: Session, contact_id: int) -> None:
+    """
+    Delete a contact from the database.
+
+    :param db: SQLAlchemy session object.
+    :param contact_id: Unique identifier of the contact to delete.
+    :raises ContactServiceError: If contact not found.
+    :return: None
+    """
     contact = contact_crud.get_by_id(db, contact_id)
     if not contact:
         raise ContactServiceError(["Contact not found"])
