@@ -32,6 +32,21 @@ class ContactServiceError(Exception):
         super().__init__("Contact service error")
 
 
+def get_contact(db: Session, contact_id: int) -> Contact:
+    """
+    Getting contact by id from CRUD
+
+    :param db: QLAlchemy session object.
+    :param contact_id: Unique identifier of the contact.
+    :raises ContactServiceError: If contact not found.
+    :return: The Contact object.
+    """
+    contact = contact_crud.get_by_id(db, contact_id)
+    if not contact:
+        raise ContactServiceError(["Contact not found"])
+    return contact
+
+
 def add_contact(db: Session, data: dict) -> Contact:
     """
     Validate and add a new contact to the database.
@@ -106,9 +121,9 @@ def update_contact(db: Session, contact_id: int, data: dict) -> Contact:
         raise ContactServiceError(["Contact not found"])
 
     if "first_name" in data:
-        contact.first_name = data["first_name"]
+        contact.first_name = data["first_name"].strip()
     if "last_name" in data:
-        contact.last_name = data["last_name"]
+        contact.last_name = data["last_name"].strip()
 
     if "phone" in data:
         phone_valid, phone_error = validate_phone(data["phone"])
