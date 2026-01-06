@@ -120,22 +120,33 @@ def update_contact(db: Session, contact_id: int, data: dict) -> Contact:
     if not contact:
         raise ContactServiceError(["Contact not found"])
 
-    if "first_name" in data:
-        contact.first_name = data["first_name"].strip()
-    if "last_name" in data:
-        contact.last_name = data["last_name"].strip()
+    errors: list[str] = []
+    # ---- name validation (pair) ----
+    first_name = data.get("first_name", contact.first_name)
+    last_name = data.get("last_name", contact.last_name)
 
+    name_valid, name_error = validate_name_pair(first_name, last_name)
+    if not name_valid:
+        errors.append(name_error)
+    contact.first_name = first_name.strip()
+    contact.last_name = last_name.strip()
+    # ---- phone ----
     if "phone" in data:
         phone_valid, phone_error = validate_phone(data["phone"])
         if not phone_valid:
-            raise ContactServiceError([phone_error])
+            errors.extend(phone_error)
+
         contact.phone = normalize_phone(data["phone"])
 
+    # ---- email ----
     if "email" in data:
         email_valid, email_error = validate_email(data["email"])
         if not email_valid:
-            raise ContactServiceError([email_error])
+            errors.append(email_error)
         contact.email = normalize_email(data["email"])
+
+    if errors:
+        raise ContactServiceError(errors)
 
     if "category" in data:
         contact.category = data["category"]
