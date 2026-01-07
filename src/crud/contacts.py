@@ -8,7 +8,7 @@ interactions and ensures a clean separation between business logic
 and persistence layer.
 """
 
-from sqlalchemy import func
+from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
 from database.models import Contact
@@ -94,3 +94,39 @@ def delete(db: Session, contact: Contact) -> None:
     """
     db.delete(contact)
     db.commit()
+
+
+def search(db: Session, query: str, categories: list[str]) -> Contact:
+    """
+    Search contacts in the database by free-text query and optional category filters.
+
+    The function builds dynamic SQLAlchemy filters based on the provided query string
+    and list of categories. It performs case-insensitive matching on first name,
+    last name, phone, and email fields, and applies category filtering if specified.
+
+    :param db: SQLAlchemy session object used to access the database.
+    :param query: Free-text search query (matched against first name, last name, phone, and email).
+    :param categories: List of category names to filter contacts.
+                    If empty, no category filter is applied.
+    :return: List of Contact objects matching the search criteria.
+    """
+    filters = []
+    if query:
+        pattern = f"%{query}%"
+        filters.append(
+            or_(
+                Contact.first_name.ilike(pattern),
+                Contact.last_name.ilike(pattern),
+                Contact.phone.ilike(pattern),
+                Contact.email.ilike(pattern),
+            )
+        )
+
+    if categories:
+        filters.append(Contact.category.in_(categories))
+
+    q = db.query(Contact)
+    if filters:
+        q = q.filter(and_(*filters))
+
+    return q.all()
