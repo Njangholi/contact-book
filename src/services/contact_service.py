@@ -168,3 +168,23 @@ def delete_contact(db: Session, contact_id: int) -> None:
         raise ContactServiceError(["Contact not found"])
 
     contact_crud.delete(db, contact)
+
+
+def search_contacts(
+    db: Session, query: str = "", categories: list[str] | None = None
+) -> Contact:
+    """
+    Search contacts in the database by query string and optional categories.
+
+    The function trims whitespace from the query string and ensures that
+    categories is always a list. It then delegates the search operation
+    to the CRUD layer.
+
+    :param db: SQLAlchemy session object used to access the database.
+    :param query: Free-text search query (e.g., part of a name, phone, or email).
+    :param categories: Optional list of category names to filter contacts.
+    :return: List of Contact objects matching the search criteria.
+    """
+    query = query.strip()
+    categories = categories or []
+    return contact_crud.search(db=db, query=query, categories=categories)
