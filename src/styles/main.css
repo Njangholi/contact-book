@@ -1,0 +1,150 @@
+/*---------- Style for Contact Book UI -------------- */
+/*---------- Style for headings -------------- */
+.stApp h1 {
+    color: #bda7ee;
+    font-size: 40px;
+    width: 90%;
+    margin-bottom: 30px;
+    text-shadow: #121212 2px 2px 5px;
+}
+
+/* Subheader */
+.stApp h2 {
+    color: #bda7ee;
+    font-size: 2em;
+    text-align: center;
+    text-shadow: #121212 1px 1px 3px;
+}
+
+/*style for contact list - first name and last name*/
+.stApp h3 {
+    color: wheat;
+    font-size: 1.5em;
+    text-align: left;
+    text-shadow: #121212 1px 1px 3px;
+}
+
+.stApp-subheader {
+    color: white;
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.stApp p {
+    font-size: 1rem;
+    /* line-height: 1.6; */
+    color: #d3d3d3;
+    /* margin-bottom: 15px; */
+}
+
+.stApp hr{
+    margin: 0px;
+    background-color: wheat;
+    height: 2px;
+}
+
+
+/*---------- Style for container -------------- */
+.stApp > div {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+}
+
+/*overall container style*/
+.st-key-center {
+    display: grid;
+    justify-content: center;
+    align-items: left;
+    /* height: 100vh; */
+    
+}
+
+/*outside container with glassmorphic effect*/
+.st-key-glass-container {
+    backdrop-filter: blur(20px);
+    /* background: rgba(255, 255, 255, 0.068); */
+    background: rgba(2, 62, 77, 0.911);
+    border-radius: 20px;
+    border: 1px solid rgba(14, 0, 0, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    padding: 2rem;
+    max-width: 800px;
+    /* margin: 100px; */
+    width: 600px;
+}
+
+/* two sections in grid */
+.st-key-glass-sections {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* individual section style */
+/* Upper and lower sections */
+.st-key-glass-section-upper {
+    background: rgba(255, 255, 255, 0.021);
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.st-key-glass-section-lower {
+    background: rgba(214, 12, 12, 0.1);
+    border-radius: 12px;
+    padding: 1.2rem;
+    text-align: left;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: all 0.4s ease;
+    
+}
+
+.st-key-glass-section-lower:hover {
+    background: rgba(214, 12, 12, 0.2);
+    box-shadow: 0 8px 32px rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+
+/*---------- Style for glassmorphic button ---------- */
+.stButton > button {
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.61);
+    background-color: rgba(2, 62, 77, 0.664);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+
+    box-shadow: 0 0 10px rgba(180, 0, 255, 0.25);
+    transition: 0.4s ease;
+    }
+
+/*style for show-edit-delete buttons*/
+.st-emotion-cache-1anq8dj{
+    margin-top: 10px;
+}
+
+.st-key-glass-button button {
+    background: rgba(255, 255, 255, 0.185);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: white;
+    border-radius: 10px;
+    margin-top: 23px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.st-key-glass-button:hover button {
+    background: rgba(255, 255, 255, 0.048);
+    transform: translateY(-2px);
+}
+
+.st-key-glass-button:active button {
+    background: rgba(7, 197, 55, 0.048);
+    transform: translateY(1px);
+}
