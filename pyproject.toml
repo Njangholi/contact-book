@@ -1,0 +1,19 @@
+[project]
+name = "contact-book"
+version = "0.1.0"
+
+
+# ==================== pylint ====================
+[tool.pylint.MAIN]
+# It will add src to pylint pathon path
+init-hook = "import sys; sys.path.append('./src')"
+
+[tool.pylint.'FORMAT']
+good-names = ["SessionLocal"]
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["too-few-public-methods"]
+
+# ==================== MYPY  ====================
+[tool.mypy]
+ignore_missing_imports = true
