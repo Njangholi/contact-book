@@ -66,22 +66,23 @@ def render_home():
                 contacts = list_contacts(db)
 
     st.divider()
-    for contact in contacts:
-        c1, c2, c3, c4 = st.columns([4, 1, 1, 1])
+    with st.container(key="glass-section-lower-upper", height=500):
+        for contact in contacts:
+            c1, c2, c3, c4 = st.columns([4, 1, 1, 1])
 
-        c1.subheader(f"{contact.first_name} {contact.last_name} \n{contact.phone}")
+            c1.subheader(f"{contact.first_name} {contact.last_name} \n{contact.phone}")
 
-        if c2.button("👁️‍🗨️", help="show", key=f"show_{contact.id}"):
-            st.session_state.page = "show"
-            st.session_state.contact_id = contact.id
-            st.rerun()
+            if c2.button("👁️‍🗨️", help="show", key=f"show_{contact.id}"):
+                st.session_state.page = "show"
+                st.session_state.contact_id = contact.id
+                st.rerun()
 
-        if c3.button("✏️", help="Edit", key=f"edit_{contact.id}"):
-            st.session_state.page = "edit"
-            st.session_state.contact_id = contact.id
-            st.rerun()
+            if c3.button("✏️", help="Edit", key=f"edit_{contact.id}"):
+                st.session_state.page = "edit"
+                st.session_state.contact_id = contact.id
+                st.rerun()
 
-        if c4.button("🗑️", help="Delete", key=f"delete_{contact.id}"):
-            delete_dialog(db, contact.id)
+            if c4.button("🗑️", help="Delete", key=f"delete_{contact.id}"):
+                delete_dialog(db, contact.id)
 
-        st.divider()
+            st.divider()
