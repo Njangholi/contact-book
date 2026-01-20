@@ -11,6 +11,7 @@ The module is typically executed at the beginning of the Streamlit app
 or via a CLI command to guarantee that the database schema exists.
 """
 
+from database import models  # noqa: F401
 from database.db import Base, engine
 
 
