@@ -35,7 +35,14 @@ def get_all(db: Session) -> list[Contact]:
     :param db: SQLAlchemy session object.
     :return: List of Contact objects ordered by creation date (descending).
     """
-    return db.query(Contact).order_by(func.lower(Contact.first_name)).all()
+    return (
+        db.query(Contact)
+        .order_by(
+        func.lower(Contact.first_name),
+        func.lower(Contact.last_name),
+        )
+        .all()
+    )
 
 
 def get_by_id(db: Session, contact_id: int) -> Contact | None:
