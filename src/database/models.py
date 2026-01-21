@@ -6,7 +6,7 @@ from datetime import datetime
 
 from sqlalchemy import Column, DateTime, Integer, String
 
-from database.db import Base
+from .db import Base
 
 
 class Contact(Base):
@@ -26,3 +26,9 @@ class Contact(Base):
     category = Column(String, index=True, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def __repr__(self):
+        return f"<Contact(id={self.id}, name='{self.first_name} {self.last_name}', phone='{self.phone}')>"
+    
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} ({self.phone})"
