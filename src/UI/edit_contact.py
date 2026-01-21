@@ -1,24 +1,33 @@
-import streamlit as st
+"""
+Streamlit UI component for editing existing contacts.
 
-# from database import db
+This module provides the user interface and logic for modifying
+existing contact information in the database.
+"""
+
+import streamlit as st
+from sqlalchemy.orm import Session
+
 from database.db import SessionLocal
 from services.contact_service import ContactServiceError, get_contact, update_contact
 
-# import os
-# import sys
-# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# from database.db import SessionLocal, engine
+# Initialize database session
+db: Session = SessionLocal()
 
 
-db = SessionLocal()
+def render_edit_contact() -> None:
+    """
+    Render the 'Edit Contact' page with a pre-filled form for editing contact details.
 
-
-def render_edit_contact():
+    Retrieves the contact based on session state contact_id and populates form fields
+    with current values. Handles form submission and contact updates.
+    """
+    # Retrieve contact from database using session state contact_id
     contact = get_contact(db, st.session_state.contact_id)
 
     st.header("✏️ Edit Contact")
     with st.form("add_contact"):
+        # Form fields pre-filled with current contact information
         data = {
             "first_name": st.text_input("First Name", value=contact.first_name),
             "last_name": st.text_input("Last Name", value=contact.last_name),
@@ -34,23 +43,23 @@ def render_edit_contact():
                 ),
             ),
         }
-        submitted = st.form_submit_button(
+        submitted: bool = st.form_submit_button(
             "💾 Update", width="stretch", key="glass-button"
         )
         if submitted:
             try:
+                # Attempt to update contact in database
                 update_contact(db, st.session_state.contact_id, data)
                 st.success("✅ Contact added successfully!")
+                # Redirect to home page
                 st.session_state.page = "home"
                 st.rerun()
             except ContactServiceError as e:
+                # Display validation errors
                 st.error("❌ Failed to update contact due to the following errors:")
                 for error in e.errors:
                     st.markdown(f" ❌ {error}")
+    # Cancel button to return to home page
     if st.button("⬅ Cancel"):
         st.session_state.page = "home"
         st.rerun()
-
-
-# if __name__ == "__main__":
-#     render_edit_contact()
