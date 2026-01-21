@@ -4,7 +4,7 @@ using SQLAlchemy."""
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-
+import sys; sys.path.append('./src')
 from config import DATABASE_URL
 
 # Create the database engine
