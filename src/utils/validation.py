@@ -41,20 +41,33 @@ def validate_phone(phone: str) -> tuple[bool, list[str]]:
     :param phone: Raw phone number input.
     :return: A tuple containing a boolean validity flag and a list of error messages.
     """
-    errors = []
+    
     validate = True
     phone = normalize_phone(phone)
+    # 1. Required field
     if not phone:
         validate = False
-        errors.append("Please provide a phone number.")
+        return validate, ["Please provide a phone number."]
 
-    if not phone.startswith("+") and not phone.isdigit():
+    errors = []
+    # 2. Check if starts with +
+    has_plus = phone.startswith("+")
+
+    # 3. Extract digits
+    digits = phone[1:] if has_plus else phone
+
+    # 4. Validate digits
+    if not digits.isdigit():
         validate = False
-        errors.append(
-            "Phone number must start with a '+' sign and contain only digits."
-        )
+        if has_plus:
+            errors.append("Phone number must contain only digits after '+' sign.")
+        else:
+            errors.append("Phone number must contain only digits.")
+    
+    if errors:
+        return validate, errors
 
-    digits = phone[1:] if phone.startswith("+") else phone
+    # 5. Validate length
     if len(digits) < 7 or len(digits) > 15:
         validate = False
         errors.append("Phone number must be between 7 and 15 digits long.")
@@ -84,6 +97,8 @@ def validate_email(email: str | None) -> tuple[bool, str | None]:
     :param email: Email address to validate.
     :return: A tuple containing a boolean validity flag and an optional error message.
     """
+
+    email = normalize_email(email)
     if not email:
         return True, None
 
