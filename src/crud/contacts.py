@@ -38,8 +38,8 @@ def get_all(db: Session) -> list[Contact]:
     return (
         db.query(Contact)
         .order_by(
-        func.lower(Contact.first_name),
-        func.lower(Contact.last_name),
+            func.lower(Contact.first_name),
+            func.lower(Contact.last_name),
         )
         .all()
     )
