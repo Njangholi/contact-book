@@ -112,7 +112,8 @@ def search(db: Session, query: str, categories: list[str]) -> Contact:
     last name, phone, and email fields, and applies category filtering if specified.
 
     :param db: SQLAlchemy session object used to access the database.
-    :param query: Free-text search query (matched against first name, last name, phone, and email).
+    :param query: Free-text search query (matched against first name, last name,
+                phone, and email).
     :param categories: List of category names to filter contacts.
                     If empty, no category filter is applied.
     :return: List of Contact objects matching the search criteria.
