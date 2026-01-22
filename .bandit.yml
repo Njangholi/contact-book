@@ -1,0 +1,22 @@
+# .bandit.yml
+skips:
+  - B101  # assert statements
+  - B105  # hardcoded password strings
+  - B311  # random
+  - B603  # subprocess without shell=True
+  - B607  # start process with partial path
+
+exclude_dirs:
+  - .venv
+  - venv
+  - env
+  - .env
+  - __pycache__
+  - migrations
+  - .pytest_cache
+  - .coverage
+
+exclude:
+  - "*/test_*.py"
+  - "*/conftest.py"
+  - "*/tests/*"
