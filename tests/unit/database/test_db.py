@@ -2,13 +2,17 @@
 Unit tests for database connection module.
 """
 
-import importlib
-import sys
+import gc
+import sqlite3
 import warnings
-from unittest.mock import MagicMock, Mock, patch
 
 import pytest
-import gc
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
+
+# pylint: disable=import-error
+from src.config import DATABASE_URL
+from src.database import db
 
 
 class TestDatabaseModuleSimple:
@@ -16,7 +20,6 @@ class TestDatabaseModuleSimple:
 
     def test_engine_exists(self):
         """Test that engine is created."""
-        from src.database import db
 
         # suppress warning for this test
         with warnings.catch_warnings():
@@ -28,27 +31,23 @@ class TestDatabaseModuleSimple:
             # To check engine could connect and close connection
             try:
                 connection = db.engine.connect()
-                connection.close()  
+                connection.close()
                 print("✓ Engine connection opened and closed successfully")
-            except Exception as e:
-                print(f"Note: {e}")
+            except SQLAlchemyError as exc:
+                print(f"Database error: {exc}")
 
     def test_sessionmaker_exists(self):
         """Test that SessionLocal exists."""
-        from src.database import db
 
         assert db.SessionLocal is not None
 
     def test_base_exists(self):
         """Test that Base exists."""
-        from src.database import db
 
         assert db.Base is not None
 
     def test_config_matches(self):
         """Test that engine URL matches config."""
-        from src.config import DATABASE_URL
-        from src.database import db
 
         # suppress warning
         with warnings.catch_warnings():
@@ -63,9 +62,6 @@ class TestDatabaseModuleSimple:
 
 def test_engine_connect_args():
     """Test SQLite connection arguments with proper cleanup."""
-    from sqlalchemy import text
-
-    from src.database import db
 
     # suppress warnings
     with warnings.catch_warnings():
@@ -88,6 +84,8 @@ def test_all_imports():
         warnings.filterwarnings("ignore", category=ResourceWarning)
 
         try:
+            # pylint: disable=import-error, import-outside-toplevel
+            # pylint: disable=reimported, redefined-outer-name
             from src.config import DATABASE_URL
             from src.database.db import Base, SessionLocal, engine
 
@@ -97,28 +95,22 @@ def test_all_imports():
             assert DATABASE_URL is not None
 
             print("✓ All imports successful")
-            return True
         except ImportError as e:
             pytest.fail(f"Import failed: {e}")
 
 
 def test_connection_management():
     """Test that connections are properly managed."""
-    import sqlite3
-
-    from sqlalchemy import text
-
-    from src.database import db
 
     initial_connections = (
-        len(sqlite3._active_connections)
+        len(sqlite3._active_connections)  # pylint: disable=protected-access
         if hasattr(sqlite3, "_active_connections")
         else 0
     )
 
     # to test create and close more than one connections
     connections = []
-    for i in range(3):
+    for _ in range(3):
         conn = db.engine.connect()
         connections.append(conn)
 
@@ -128,14 +120,12 @@ def test_connection_management():
     for conn in connections:
         conn.close()
 
-    
-
     gc.collect()
 
     print(f"✓ Connections opened and closed: {len(connections)}")
 
     final_connections = (
-        len(sqlite3._active_connections)
+        len(sqlite3._active_connections)  # pylint: disable=protected-access
         if hasattr(sqlite3, "_active_connections")
         else 0
     )
