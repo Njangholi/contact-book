@@ -2,22 +2,19 @@
 Shared test fixtures for the Contact Book application.
 """
 
-import os
-import sys
+import gc
 import warnings
-from unittest.mock import MagicMock, Mock
+from unittest.mock import Mock
 
 import pytest
 from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import sessionmaker
+
+from src.database.db import Base, cleanup_database
+from src.database.models import Contact
 
 # Suprress some warnings
 warnings.filterwarnings("ignore", category=ResourceWarning)
-
-# Add src to python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-
-from src.database.db import Base, cleanup_database
 
 
 @pytest.fixture(scope="function")
@@ -55,13 +52,13 @@ def test_db_session():
         poolclass=None,
     )
 
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    testing_session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
     # Create all tables
     Base.metadata.create_all(bind=engine)
 
     # Create a session
-    db = TestingSessionLocal()
+    db = testing_session_local()
 
     try:
         yield db
@@ -71,7 +68,6 @@ def test_db_session():
 
         # Close all connections
         engine.dispose()
-
 
 
 @pytest.fixture
@@ -89,7 +85,6 @@ def sample_contact_data():
 @pytest.fixture
 def sample_contact():
     """Create and return a sample Contact object."""
-    from src.database.models import Contact
 
     return Contact(
         id=1,
@@ -109,13 +104,13 @@ def test_engine():
         connect_args={"check_same_thread": False},
         poolclass=None,
     )
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    testing_session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
     # Create all tables
     Base.metadata.create_all(bind=engine)
 
     # Create a session
-    db = TestingSessionLocal()
+    db = testing_session_local()
 
     try:
         yield db
@@ -126,9 +121,7 @@ def test_engine():
         # dispose engine
         engine.dispose()
 
-        # کمک به garbage collector
-        import gc
-
+        # Help Garbage collector
         gc.collect()
 
 
@@ -141,7 +134,6 @@ def cleanup_after_all_tests():
     cleanup_database()
 
     # Help Garbage collector
-    import gc
 
     gc.collect()
     print("All tests completed, resources cleaned up")
@@ -156,7 +148,5 @@ def setup_and_teardown():
 
     yield
 
-    # After test
-    import gc
-
-    gc.collect()  
+    # Help Garbage collector
+    gc.collect()
