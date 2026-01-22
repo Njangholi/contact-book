@@ -17,7 +17,8 @@ def validate_name_pair(first_name: str, last_name: str) -> tuple[bool, str]:
 
     :param first_name: The first name provided by the user.
     :param last_name: The last name provided by the user.
-    :return: A tuple containing a boolean indicating validity and an error message if invalid.
+    :return: A tuple containing a boolean indicating validity
+            and an error message if invalid.
     """
     if not first_name.strip() and not last_name.strip():
         return (False, "At least one of First Name or Last Name must be provided.")
@@ -41,7 +42,7 @@ def validate_phone(phone: str) -> tuple[bool, list[str]]:
     :param phone: Raw phone number input.
     :return: A tuple containing a boolean validity flag and a list of error messages.
     """
-    
+
     validate = True
     phone = normalize_phone(phone)
     # 1. Required field
@@ -63,7 +64,7 @@ def validate_phone(phone: str) -> tuple[bool, list[str]]:
             errors.append("Phone number must contain only digits after '+' sign.")
         else:
             errors.append("Phone number must contain only digits.")
-    
+
     if errors:
         return validate, errors
 
