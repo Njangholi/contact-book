@@ -27,26 +27,42 @@ jobs:
           python-version: ${{ matrix.python }}
           cache: pip
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install streamlit pytest pylint
+          pip install streamlit pytest pylint bandit black ruff
+
+      - name: 🧹 Format check with black
+        run: |
+          black --check .
+
+      - name: ⚡ Lint with ruff
+        run: |
+          echo "Running ruff..."
+          ruff check .
 
       - name: 🔍 Lint with pylint
         run: |
           echo "Running pylint..."
-          pylint games.py dashboard.py --disable=C0114,C0115,C0116 || true
+          pylint . --disable=C0114,C0115,C0116 --fail-under=8.0
+      
+      - name: Security check with bandit
+        run: |
+          echo "Running bandit..."
+          bandit -r . --severity-level high,medium --confidence-level high
+
+      - name: 🖥️ Smoke test – Streamlit app import
+        env:
+          PYTHONPATH: src
+        run: |
+          echo "Running Streamlit import smoke test..."
+          python - <<EOF
+          import run
+          print("Streamlit app entrypoint imported successfully ✅")
+          EOF
 
       - name: Run unit tests
         run: |
           echo "Running tests..."
-          pytest -q || true
+          pytest -q
