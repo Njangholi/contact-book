@@ -50,6 +50,7 @@ def render_add_contact() -> None:
             except ContactServiceError as e:
                 # Display validation errors
                 st.error("❌ Failed to add contact due to the following errors:")
+                # pylint: disable=duplicate-code
                 for error in e.errors:
                     st.markdown(f" ❌ {error}")
     # Cancel button to return to home page
