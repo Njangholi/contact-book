@@ -1,14 +1,24 @@
+"""
+Main CLI module for Contact Book application.
+
+This module provides a command-line interface for managing contacts
+with features like adding, deleting, updating, searching, and listing contacts.
+Uses Rich library for enhanced terminal output.
+"""
+
 import os
 import sys
 
 from rich.console import Console
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.table import Table
-
 from sqlalchemy import inspect
+from sqlalchemy.orm import Session
 
+# Add parent directory to path to allow imports from sibling modules
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+# pylint: disable=wrong-import-position
 from database.db import SessionLocal, engine
 from services.contact_service import (
     ContactServiceError,
@@ -21,14 +31,25 @@ from services.contact_service import (
 )
 
 
-def check_databse_initialized():
+def check_database_initialized() -> bool:
+    """
+    Check if the database is properly initialized.
+
+    :return: True if the 'contacts' table exists, False otherwise
+    """
     return inspect(engine).has_table("contacts")
 
 
 console = Console()
 
 
-def show_contacts(db):
+def show_contacts(db: Session) -> None:
+    """
+    Display all contacts in a formatted table.
+
+    :param db: Database session
+    :type db: Session
+    """
     contacts = list_contacts(db)
 
     if not contacts:
@@ -54,7 +75,13 @@ def show_contacts(db):
     console.print(table)
 
 
-def add_new_contact(db):
+def add_new_contact(db: Session) -> None:
+    """
+    Prompt user for contact details and add a new contact.
+
+    :param db: Database session
+    :type db: Session
+    """
     console.print("[bold cyan]Add New Contact[/bold cyan]")
 
     first_name = Prompt.ask("First name")
@@ -84,7 +111,13 @@ def add_new_contact(db):
             console.print(f" • {err}")
 
 
-def search_contact(db):
+def search_contact(db: Session) -> None:
+    """
+    Search for contacts by query string.
+
+    :param db: Database session
+    :type db: Session
+    """
     query = Prompt.ask("Search query")
     results = search_contacts(db, query, [])
 
@@ -100,7 +133,13 @@ def search_contact(db):
         )
 
 
-def delete_contact_prompt(db):
+def delete_contact_prompt(db: Session) -> None:
+    """
+    Prompt user for contact ID and delete the contact.
+
+    :param db: Database session
+    :type db: Session
+    """
     contact_id = IntPrompt.ask("Enter contact ID to delete")
 
     # contact = search_contacts(db, str(contact_id), [])
@@ -128,7 +167,13 @@ def delete_contact_prompt(db):
         console.print("[yellow]Deletion cancelled.[/yellow]")
 
 
-def edit_contact_prompt(db):
+def edit_contact_prompt(db: Session) -> None:
+    """
+    Prompt user for contact ID and edit the contact details.
+
+    :param db: Database session
+    :type db: Session
+    """
     contact_id = IntPrompt.ask("Enter contact ID to edit")
 
     contact = get_contact(db, contact_id)
@@ -167,7 +212,13 @@ def edit_contact_prompt(db):
             console.print(f" • {err}")
 
 
-def main_menu():
+def main_menu() -> int:
+    """
+    Display the main menu and get user choice.
+
+    :return: User's menu choice (1-6)
+    :rtype: int
+    """
     console.print("\n[bold magenta]📒 Contact Book CLI[/bold magenta]\n")
 
     console.print(
@@ -182,7 +233,10 @@ def main_menu():
     return IntPrompt.ask("Choose an option", choices=["1", "2", "3", "4", "5", "6"])
 
 
-def main():
+def main() -> None:
+    """
+    Main function to run the Contact Book CLI application.
+    """
     db = SessionLocal()
 
     while True:
@@ -204,7 +258,7 @@ def main():
 
 
 if __name__ == "__main__":
-    if not check_databse_initialized():
+    if not check_database_initialized():
         print(
             """
             ❌ Database is not initialized.\n
