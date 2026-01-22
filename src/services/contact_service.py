@@ -112,7 +112,8 @@ def update_contact(db: Session, contact_id: int, data: dict) -> Contact:
 
     :param db: SQLAlchemy session object.
     :param contact_id: Unique identifier of the contact to update.
-    :param data: Dictionary of fields to update (first_name, last_name, phone, email, category).
+    :param data: Dictionary of fields to update (first_name, last_name,
+                phone, email, category).
     :raises ContactServiceError: If contact not found or validation fails.
     :return: The updated Contact object.
     """
