@@ -12,11 +12,11 @@ import streamlit as st
 from sqlalchemy import inspect
 
 from database.db import engine
-from UI.add_contact import render_add_contact
-from UI.edit_contact import render_edit_contact
-from UI.home import render_home
-from UI.router import init_router
-from UI.show_contact import render_show_contact
+from ui.add_contact import render_add_contact
+from ui.edit_contact import render_edit_contact
+from ui.home import render_home
+from ui.router import init_router
+from ui.show_contact import render_show_contact
 
 st.set_page_config(page_title="Contact Book", layout="wide")
 
