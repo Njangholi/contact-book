@@ -7,7 +7,6 @@ with a safe fallback to a local SQLite database for development
 and testing purposes.
 """
 
-
 import os
 
 # Absolute path to the directory containing this file.

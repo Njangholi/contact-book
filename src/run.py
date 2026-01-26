@@ -23,7 +23,8 @@ st.set_page_config(page_title="Contact Book", layout="wide")
 
 def check_database_initialized() -> bool:
     """
-    Check if the database is properly initialized by verifying the contacts table exists.
+    Check if the database is properly initialized by verifying the contacts
+    table exists.
 
     :return: True if the 'contacts' table exists, False otherwise
     """
