@@ -1,23 +1,16 @@
 [project]
 name = "contact-book"
-version = "0.1.0"
+version = "1.0.0"
 
 
 # ==================== pylint ====================
-#[tool.pylint.MAIN]
 [tool.pylint.MASTER]
 
 # It will add src to pylint pathon path
-init-hook = """
-import sys
-from pathlib import Path
-project_root = Path(__file__).resolve().parent
-sys.path.insert(0, str(project_root))
-sys.path.insert(0, str(project_root / 'src'))
-"""
+init-hook='import sys; sys.path.append("src")'
 
 [tool.pylint.'FORMAT']
-good-names = ["SessionLocal"]
+good-names = ["SessionLocal", "CLI"]
 max-line-length = 88
 
 [tool.pylint.MESSAGES_CONTROL]
