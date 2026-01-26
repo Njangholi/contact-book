@@ -72,6 +72,8 @@ coverage.xml
 .pytest_cache/
 *.pytest_cache/
 cover/
+report.html
+style.css
 
 # Ignore benchmark results
 benchmark_results/
