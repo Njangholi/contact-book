@@ -1,4 +1,3 @@
-"""Contact Book Package.
-"""
+"""Contact Book Package."""
 
 __version__ = "1.0.0"
