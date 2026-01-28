@@ -1,4 +1,20 @@
 # Contact Book – Project Architecture
+In this document, we detail the architecture and design decisions behind the Contact Book application.
+
+## 📌 Table of Contents
+- [Overview](#overview)
+- [Folder Structure Explanation](#folder-structure-explanation)
+- [🎯 Layer Responsibilities](#-layer-responsibilities)
+  - [1️⃣ UI Layer (Streamlit)](#1️⃣-ui-layer-streamlit)
+  - [2️⃣ Service Layer](#2️⃣-service-layer)
+  - [3️⃣ CRUD Layer](#3️⃣-crud-layer)
+  - [4️⃣ Database Layer](#4️⃣-database-layer)
+  - [5️⃣ Utils Layer](#5️⃣-utils-layer)
+  - [6️⃣ Tests Layer](#6️⃣-tests-layer)
+- [Why This Architecture?](#why-this-architecture)
+- [Future Improvements](#-future-improvements)
+- [Final Notes](#final-notes)
+
 
 ## Overview
 This project follows a **Clean Architecture-inspired layered design** to ensure:
@@ -13,26 +29,31 @@ The goal is to keep business logic independent from UI frameworks and database t
 
 ## Folder Structure Explanation
 
-src/
+```
+contact-book/
+│
+├── src/
+│   ├── database/      # Database engine and session handling
+│   ├── models/        # SQLAlchemy ORM models
+│   ├── crud/          # Data access layer (repositories)
+│   ├── services/      # Business logic (validation, normalization, etc.)
+│   ├── CLI/           # Command-line interface
+│   ├── utils/         # Utility functions (e.g. validation helpers)
+│   ├── ui/            # Streamlit pages and routing
+│   └── run.py         # Application entry point
+│
+├── tests/             # Unit tests and integration tests
+│   ├── unit/          # Unit tests for services and utils
+│   └── integration/   # Integration tests for end-to-end scenarios
+├── docs/              # Project documentation
+├── .github/           # GitHub Actions CI workflows
+├── .bandit.yml        # Security scan configuration
+├── check.ps1          # Local quality checks (lint, type check, security)
+├── requirements.txt   # Python dependencies
+├── pyproject.toml     # Project metadata and tool configurations
+└── README.md          # Project documentation
+```
 
-├── app.py               # Streamlit entry point (UI composition)  
-├── main.py              # CLI entry point  
-├── UI/                  # Presentation layer (Streamlit pages)  
-│   ├── add_contact.py  
-│   ├── edit_contact.py  
-│   ├── show_contact.py  
-│   ├── home.py  
-│   └── router.py  
-├── services/            # Business logic (Service layer)  
-│    └── contact_service.py  
-├── crud/                # Data access layer  
-│   └── contacts.py  
-├── database/            # Persistence layer  
-│   ├── db.py  
-│   └── models.py  
-├── utils/               # Cross-cutting utilities  
-│   └── validation.py  
-└── tests/               # Unit tests  
 
 ## 🎯 Layer Responsibilities
 
@@ -46,21 +67,23 @@ src/
 
 > This makes it easy to swap Streamlit with another UI framework in the future.
 
-`src/UI/`
-Each file represents a UI responsibility: //TODO update at the end
-- `new_contact.py`: Add contact UI
+`src/ui/`
+Each file represents a UI responsibility:
+- `home.py`: Main dashboard
+- `router.py`: Navigation between pages
+- `add_contact.py`: Add contact UI
 - `show_contact.py`: Display contacts
-- `update.py`: Update contact UI
+- `edit_contact.py`: Update contact UI
 
-`src/app.py`
+`src/run.py`
 Main Streamlit entry point.  
 Responsible for:
 - Layout
 - Navigation
 - Calling UI modules
 
-`src/main.py`
-CLI or alternative execution entry point. //TODO update at the end
+`src/CLI/main.py`
+CLI or alternative execution entry point. 
 
 ### 2️⃣ Service Layer
 **Responsibility:** Business logic and application rules
@@ -86,7 +109,8 @@ CLI or alternative execution entry point. //TODO update at the end
 - Performs direct database operations
 - Contains no validation or business logic
 - Talks only to SQLAlchemy models
-> This keeps database logic simple and replaceable.
+> This keeps database logic simple and replaceable.  
+
 `src/crud/`
 - `contacts.py`: CRUD operations for Contact entity
 - Create a contact
@@ -108,24 +132,25 @@ Contains database configuration and ORM models.
 - `models.py`: Database schema definitions
 
 ### 5️⃣ Utils Layer
-**Responsibility:** Shared utilities and helpers
+**Responsibility:** Shared utilities and helpers  
 - Contains reusable, cross-cutting logic and stateless functions
 - Used by multiple layers
-- Independent of UI and database
-`src/utils/`
+- Independent of UI and database  
+`src/utils/`  
 Includes:
 - Input validation functions
 - Data normalization functions
 - formatters
 
-### 6️⃣ Tests Layer //TODO update at the end
-**Responsibility:** Unit tests for all layers
-- Contains unit tests for service, CRUD, and utils layers
-- Mocks UI and database interactions
-`src/tests/`
-- Tests business logic in `services/`
-- Tests data access in `crud/`
-- Tests utility functions in `utils/`
+### 6️⃣ Tests Layer 
+**Responsibility:** Unit tests for all layers and integration tests
+- Contains unit tests for service, CRUD, and utils layers ensuring each layer works correctly in isolation
+- Tests database and models in `unit/database/`
+- Tests data access in `unit/crud/`
+- Tests business logic in `unit/services/`
+- Tests utility functions in `unit/utils/`
+- Tests main application flows in `unit/CLI/`
+- Tests integration of layers in `integration/`
 
 ## Why This Architecture?
 ✅ Scales naturally with project growth
