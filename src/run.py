@@ -9,26 +9,16 @@ import sys
 from pathlib import Path
 
 import streamlit as st
-from sqlalchemy import inspect
 
-from database.db import engine
+from database.init import ensure_database_initialized
+from database.seed import seed_demo_contacts
 from ui.add_contact import render_add_contact
 from ui.edit_contact import render_edit_contact
 from ui.home import render_home
 from ui.router import init_router
 from ui.show_contact import render_show_contact
 
-st.set_page_config(page_title="Contact Book", layout="wide")
-
-
-def check_database_initialized() -> bool:
-    """
-    Check if the database is properly initialized by verifying the contacts
-    table exists.
-
-    :return: True if the 'contacts' table exists, False otherwise
-    """
-    return inspect(engine).has_table("contacts")
+st.set_page_config(page_title="Contact Book", page_icon="📒", layout="wide")
 
 
 def load_css(file_name: str) -> None:
@@ -46,6 +36,14 @@ def load_css(file_name: str) -> None:
         st.warning(f"⚠️ CSS file not found: {file_name}")
 
 
+# Check if the database is properly initialized by verifying the contacts table exists.
+# if not initializing the database
+ensure_database_initialized()
+
+# Seed the database with demo contacts if none exist
+seed_demo_contacts()
+
+
 def main() -> None:
     """
     Main function to run the Streamlit Contact Book application.
@@ -53,15 +51,6 @@ def main() -> None:
     Handles database initialization check, routing, and page rendering.
     """
 
-    # Check database initialization
-    if not check_database_initialized():
-        st.error(
-            "❌ Database is not initialized.\n\n"
-            "Please run the following command first:\n\n"
-            "`python src/init_db.py`",
-            icon="🚨",
-        )
-        st.stop()
     # Initialize router for session state management
     init_router()
 

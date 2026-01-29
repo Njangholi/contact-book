@@ -7,8 +7,8 @@ It imports the SQLAlchemy ``Base`` metadata and engine, loads all model
 definitions, and ensures that the required tables are created before the
 application starts.
 
-The module is typically executed at the beginning of the Streamlit app
-or via a CLI command to guarantee that the database schema exists.
+The module is typically executed at the beginning of a CLI command
+to guarantee that the database schema exists.
 """
 
 # pylint: disable=unused-import
