@@ -12,26 +12,27 @@ jobs:
     name: Build, Lint & Test – Python ${{ matrix.python }}
     runs-on: ubuntu-latest
     timeout-minutes: 12
+    env:
+      PYTHONPATH: src
 
     strategy:
       matrix:
         python: ["3.11", "3.12", "3.13"]   
 
     steps:
-      - name: Checkout repository
+      - name: ⬇️ Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: 🐍 Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
           cache: pip
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: |
           python -m pip install --upgrade pip
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          pip install streamlit pytest pylint bandit black ruff
+          pip install -r requirements-dev.txt
 
       - name: 🧹 Format check with black
         run: |
@@ -46,23 +47,25 @@ jobs:
         run: |
           echo "Running pylint..."
           pylint . --disable=C0114,C0115,C0116 --fail-under=8.0
-      
-      - name: Security check with bandit
+
+      - name: 🧪 Type check with mypy
         run: |
-          echo "Running bandit..."
-          bandit -r . --severity-level high,medium --confidence-level high
+          echo "Running mypy..."
+          mypy .
+
+      - name: ✅ Security check with bandit
+        run: |
+          echo "Running banditon src/ only..."
+          bandit -r src/ --severity-level high,medium --confidence-level high
 
       - name: 🖥️ Smoke test – Streamlit app import
         env:
           PYTHONPATH: src
         run: |
           echo "Running Streamlit import smoke test..."
-          python - <<EOF
-          import run
-          print("Streamlit app entrypoint imported successfully ✅")
-          EOF
+          python -c "import run; print('✅ Streamlit entrypoint imported successfully')"
 
-      - name: Run unit tests
+      - name: 🧠 Run unit tests
         run: |
           echo "Running tests..."
           pytest -q
