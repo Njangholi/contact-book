@@ -1,0 +1,4 @@
+# Requirements Package for Contact Book Project
+rich==14.3.1
+SQLAlchemy==2.0.46
+streamlit==1.52.2
