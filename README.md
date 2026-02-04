@@ -115,8 +115,7 @@ contact-book/
 │   ├── services/      # Business logic (validation, normalization, etc.)
 │   ├── CLI/           # Command-line interface 
 │   ├── utils/         # Utility functions (e.g. validation helpers)
-│   ├── ui/            # Streamlit pages and routing
-│   └── run.py         # Application entry point
+│   └── ui/            # Streamlit pages and routing
 │
 ├── tests/             # Unit tests and integration tests
 │   ├── unit/          # Unit tests for services and utils
@@ -127,7 +126,8 @@ contact-book/
 ├── check.ps1          # Local quality checks (lint, type check, security)
 ├── requirements.txt   # Python dependencies
 ├── pyproject.toml     # Project metadata and tool configurations
-└── README.md          # Project documentation
+├── README.md          # Project documentation
+└── App.py             # Application entry point
 ```
 
 ---
@@ -159,7 +159,7 @@ pip install -r requirements.txt
 ### Web Interface
 To run the Streamlit app:
 ```bash
-streamlit run src/run.py
+streamlit run app.py
 ```  
 
 Then open your web browser and navigate to `http://localhost:8501` to access the app.  
@@ -168,7 +168,7 @@ Then open your web browser and navigate to `http://localhost:8501` to access the
 ### Terminal Version
 To run contact book in the terminal:
 ```bash
-python src/CLI/main.py
+python -m src.CLI.main
 ```
 Then follow the on-screen prompts to manage your contacts.
 

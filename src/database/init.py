@@ -5,7 +5,7 @@ It checks for the existence of required tables and creates them if absent.
 
 from sqlalchemy import inspect
 
-from .db import Base, engine
+from src.database.db import Base, engine
 
 
 def ensure_database_initialized() -> None:

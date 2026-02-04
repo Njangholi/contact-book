@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, Integer, String
 
-from .db import Base
+from src.database.db import Base
 
 
 class Contact(Base):

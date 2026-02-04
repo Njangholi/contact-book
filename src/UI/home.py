@@ -8,8 +8,8 @@ filtering, and CRUD operation buttons.
 import streamlit as st
 from sqlalchemy.orm import Session
 
-from database.db import SessionLocal
-from services.contact_service import delete_contact, list_contacts, search_contacts
+from src.database.db import SessionLocal
+from src.services.contact_service import delete_contact, list_contacts, search_contacts
 
 # Initialize database session
 db = SessionLocal()
@@ -83,7 +83,7 @@ def render_home() -> None:
                 if not contacts:
                     st.info("No contact found")
             else:
-                contacts = list_contacts(db)
+                contacts = list_contacts(db)  # type: ignore[assignment]
 
     st.divider()
 

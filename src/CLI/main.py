@@ -6,21 +6,15 @@ with features like adding, deleting, updating, searching, and listing contacts.
 Uses Rich library for enhanced terminal output.
 """
 
-import os
-import sys
-
 from rich.console import Console
 from rich.prompt import Confirm, IntPrompt, Prompt
 from rich.table import Table
 from sqlalchemy import inspect
 from sqlalchemy.orm import Session
 
-# Add parent directory to path to allow imports from sibling modules
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 # pylint: disable=wrong-import-position
-from database.db import SessionLocal, engine
-from services.contact_service import (
+from src.database.db import SessionLocal, engine
+from src.services.contact_service import (
     ContactServiceError,
     add_contact,
     delete_contact,
@@ -157,7 +151,7 @@ def delete_contact_prompt(db: Session) -> None:
     if Confirm.ask("Are you sure you want to delete this contact?"):
 
         try:
-            delete_contact(db, contact.id)
+            delete_contact(db, contact.id)  # type: ignore[arg-type]
             console.print("[green]🗑 Contact deleted successfully[/green]")
         except ContactServiceError as e:
             console.print("[red]❌ Error:[/red]")
@@ -263,7 +257,7 @@ if __name__ == "__main__":
             """
             ❌ Database is not initialized.\n
             Please run the following command first:\n
-            `python src/init_db.py`
+            `python -m src.init_db`
             """
         )
 

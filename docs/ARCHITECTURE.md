@@ -37,10 +37,9 @@ contact-book/
 │   ├── models/        # SQLAlchemy ORM models
 │   ├── crud/          # Data access layer (repositories)
 │   ├── services/      # Business logic (validation, normalization, etc.)
-│   ├── CLI/           # Command-line interface
+│   ├── CLI/           # Command-line interface 
 │   ├── utils/         # Utility functions (e.g. validation helpers)
-│   ├── ui/            # Streamlit pages and routing
-│   └── run.py         # Application entry point
+│   └── ui/            # Streamlit pages and routing
 │
 ├── tests/             # Unit tests and integration tests
 │   ├── unit/          # Unit tests for services and utils
@@ -51,7 +50,8 @@ contact-book/
 ├── check.ps1          # Local quality checks (lint, type check, security)
 ├── requirements.txt   # Python dependencies
 ├── pyproject.toml     # Project metadata and tool configurations
-└── README.md          # Project documentation
+├── README.md          # Project documentation
+└── App.py             # Application entry point
 ```
 
 
@@ -75,7 +75,7 @@ Each file represents a UI responsibility:
 - `show_contact.py`: Display contacts
 - `edit_contact.py`: Update contact UI
 
-`src/run.py`
+`app.py`
 Main Streamlit entry point.  
 Responsible for:
 - Layout

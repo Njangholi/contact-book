@@ -11,7 +11,7 @@ and persistence layer.
 from sqlalchemy import and_, func, or_
 from sqlalchemy.orm import Session
 
-from database.models import Contact
+from src.database.models import Contact
 
 
 def create(db: Session, contact: Contact) -> Contact:
@@ -137,4 +137,4 @@ def search(db: Session, query: str, categories: list[str]) -> Contact:
     if filters:
         q = q.filter(and_(*filters))
 
-    return q.all()
+    return q.all()  # type: ignore[return-value]

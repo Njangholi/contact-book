@@ -6,8 +6,8 @@ Suitable for initial setup or testing purposes.
 
 from sqlalchemy.orm import Session
 
-from database.db import SessionLocal
-from services.contact_service import add_contact, list_contacts
+from src.database.db import SessionLocal
+from src.services.contact_service import add_contact, list_contacts
 
 # Initialize database session
 db: Session = SessionLocal()

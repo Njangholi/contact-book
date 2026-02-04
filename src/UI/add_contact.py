@@ -8,8 +8,8 @@ to the Contact Book database.
 import streamlit as st
 from sqlalchemy.orm import Session
 
-from database.db import SessionLocal
-from services.contact_service import ContactServiceError, add_contact
+from src.database.db import SessionLocal
+from src.services.contact_service import ContactServiceError, add_contact
 
 # Initialize database session
 db: Session = SessionLocal()

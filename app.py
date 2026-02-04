@@ -10,13 +10,13 @@ from pathlib import Path
 
 import streamlit as st
 
-from database.init import ensure_database_initialized
-from database.seed import seed_demo_contacts
-from ui.add_contact import render_add_contact
-from ui.edit_contact import render_edit_contact
-from ui.home import render_home
-from ui.router import init_router
-from ui.show_contact import render_show_contact
+from src.database.init import ensure_database_initialized
+from src.database.seed import seed_demo_contacts
+from src.ui.add_contact import render_add_contact
+from src.ui.edit_contact import render_edit_contact
+from src.ui.home import render_home
+from src.ui.router import init_router
+from src.ui.show_contact import render_show_contact
 
 st.set_page_config(page_title="Contact Book", page_icon="📒", layout="wide")
 

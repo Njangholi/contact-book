@@ -8,8 +8,12 @@ existing contact information in the database.
 import streamlit as st
 from sqlalchemy.orm import Session
 
-from database.db import SessionLocal
-from services.contact_service import ContactServiceError, get_contact, update_contact
+from src.database.db import SessionLocal
+from src.services.contact_service import (
+    ContactServiceError,
+    get_contact,
+    update_contact,
+)
 
 # Initialize database session
 db: Session = SessionLocal()
@@ -25,6 +29,18 @@ def render_edit_contact() -> None:
     # Retrieve contact from database using session state contact_id
     contact = get_contact(db, st.session_state.contact_id)
 
+    # Define choices
+    category_options: list[str] = ["Family", "Friends", "Work", "Other"]
+
+    # Extracting the category value in a safe and typed manner
+    category_value: str = str(contact.category) if contact.category else "Other"
+
+    index = (
+        category_options.index(category_value)
+        if category_value in category_options
+        else 0
+    )
+
     st.header("✏️ Edit Contact")
     with st.form("add_contact"):
         # Form fields pre-filled with current contact information
@@ -35,12 +51,8 @@ def render_edit_contact() -> None:
             "email": st.text_input("Email", value=contact.email),
             "category": st.selectbox(
                 "Category",
-                ["Family", "Friends", "Work", "Other"],
-                index=(
-                    ["Family", "Friends", "Work", "Other"].index(contact.category)
-                    if contact.category in ["Family", "Friends", "Work", "Other"]
-                    else 0
-                ),
+                options=category_options,
+                index=index,
             ),
         }
         submitted: bool = st.form_submit_button(

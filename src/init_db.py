@@ -12,8 +12,8 @@ to guarantee that the database schema exists.
 """
 
 # pylint: disable=unused-import
-from database import models  # noqa: F401
-from database.db import Base, engine
+from src.database import models  # noqa: F401
+from src.database.db import Base, engine
 
 
 def init_db():

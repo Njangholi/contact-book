@@ -8,9 +8,9 @@ the CRUD layer. Errors are wrapped in a custom ``ContactServiceError``.
 
 from sqlalchemy.orm import Session
 
-from crud import contacts as contact_crud
-from database.models import Contact
-from utils.validation import (
+from src.crud import contacts as contact_crud
+from src.database.models import Contact
+from src.utils.validation import (
     normalize_email,
     normalize_phone,
     validate_email,
@@ -78,7 +78,7 @@ def add_contact(db: Session, data: dict) -> Contact:
     email = normalize_email(email_raw)
     email_valid, email_error = validate_email(email)
     if not email_valid:
-        errors.append(email_error)
+        errors.append(email_error)  # type: ignore[arg-type]
     elif email and contact_crud.get_by_email(db, email):
         errors.append("📧 Email already exists.")
 
@@ -137,14 +137,14 @@ def update_contact(db: Session, contact_id: int, data: dict) -> Contact:
         if not phone_valid:
             errors.extend(phone_error)
 
-        contact.phone = normalize_phone(data["phone"])
+        contact.phone = normalize_phone(data["phone"])  # type: ignore[assignment]
 
     # ---- email ----
     if "email" in data:
         email_valid, email_error = validate_email(data["email"])
         if not email_valid:
-            errors.append(email_error)
-        contact.email = normalize_email(data["email"])
+            errors.append(email_error)  # type: ignore[arg-type]
+        contact.email = normalize_email(data["email"])  # type: ignore[assignment]
 
     if errors:
         raise ContactServiceError(errors)

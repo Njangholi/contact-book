@@ -56,14 +56,12 @@ jobs:
       - name: ✅ Security check with bandit
         run: |
           echo "Running banditon src/ only..."
-          bandit -r src/ --severity-level high,medium --confidence-level high
+          bandit -r src/ --severity-level medium --confidence-level medium
 
       - name: 🖥️ Smoke test – Streamlit app import
-        env:
-          PYTHONPATH: src
         run: |
           echo "Running Streamlit import smoke test..."
-          python -c "import run; print('✅ Streamlit entrypoint imported successfully')"
+          python -c "import app; print('✅ Streamlit entrypoint imported successfully')"
 
       - name: 🧠 Run unit tests
         run: |

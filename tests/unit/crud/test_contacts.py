@@ -6,7 +6,7 @@ from unittest.mock import MagicMock, Mock
 
 from sqlalchemy.orm import Query
 
-from crud.contacts import (
+from src.crud.contacts import (
     create,
     delete,
     get_all,
@@ -16,7 +16,7 @@ from crud.contacts import (
     search,
     update,
 )
-from database.models import Contact
+from src.database.models import Contact
 
 
 class TestCRUDOperations:

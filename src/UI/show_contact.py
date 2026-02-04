@@ -7,8 +7,8 @@ in a read-only format.
 
 import streamlit as st
 
-from database.db import SessionLocal
-from services.contact_service import get_contact  # ContactServiceError,
+from src.database.db import SessionLocal
+from src.services.contact_service import get_contact  # ContactServiceError,
 
 # Initialize database session
 db = SessionLocal()
